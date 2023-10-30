@@ -195,7 +195,14 @@ createApp({
           message: "Ok, nessun problema!",
           status: "recived",
         });
-      }, 1500);
+      }, 500);
+    },
+  },
+  computed: {
+    filteredContacts() {
+      return this.contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(this.searchInputText.toLowerCase().trim())
+      );
     },
   },
   mounted() {},

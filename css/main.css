@@ -77,3 +77,21 @@
   border-radius: 0px;
   border: 0px none transparent;
 }
+
+.message::after {
+  position: absolute;
+  font-weight: 900;
+  font-family: "Font Awesome 5 Free";
+  color: rgb(51 65 85);
+  content: "\f078";
+  top: 5px;
+  display: table;
+  right: 8px;
+  opacity: 0;
+  transition: all 0.1s linear;
+  cursor: pointer;
+}
+
+.message:hover::after {
+  opacity: 100;
+}

@@ -25,7 +25,12 @@
           <div class="flex flex-col bg-[#e6e6e6] py-3 px-5">
             <div class="flex justify-between items-center">
               <div class="flex gap-3 items-center">
-                <img class="w-[50px] h-[50px] rounded-full" :src="userProfile.avatar" alt="user photo" />
+                <img
+                  draggable="false"
+                  class="w-[50px] h-[50px] rounded-full"
+                  :src="userProfile.avatar"
+                  alt="user photo"
+                />
                 <h2 class="font-semih2 text-slate-800">{{ userProfile.name }}</h2>
               </div>
               <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
@@ -61,17 +66,19 @@
           <!-- CONTATTI -->
           <ul class="flex flex-col overflow-auto">
             <li
-              v-for="contact, index in contacts"
+              v-for="contact, index in filteredContacts"
               @click="changeIndex(index)"
               :class="{'bg-[#e5e7e6]': index === currentIndex}"
               class="drop-shadow-sm bg-white transition-colors duration-200 py-3 px-5 flex items-center gap-3 relative cursor-pointer"
             >
-              <img class="rounded-full w-[60px] h-[60px]" :src="contact.avatar" alt="user1" />
+              <img draggable="false" class="rounded-full w-[60px] h-[60px]" :src="contact.avatar" alt="user1" />
               <div class="flex flex-col max-w-[230px]">
                 <h2 class="text-sm font-semibold text-slate-800 mb-1">{{ contact.name }}</h2>
-                <span class="text-sm text-slate-600">Lorem ipsum dolor sit amet consectetur.</span>
+                <span class="text-sm text-slate-600">{{ contact.messages.at(-1).message }}</span>
               </div>
-              <span class="absolute top-4 right-4 text-slate-600 text-xs">12:00</span>
+              <span class="absolute top-4 right-4 text-slate-600 text-xs"
+                >{{ luxon.DateTime.fromFormat(contact.messages.at(-1).date, "dd/MM/yyyy HH:mm:ss").toFormat('HH:mm')}}
+              </span>
             </li>
           </ul>
         </aside>
@@ -82,7 +89,12 @@
             <div class="flex flex-col bg-[#e6e6e6] py-3 px-5">
               <div class="flex justify-between items-center">
                 <div class="flex gap-3 items-center cursor-pointer">
-                  <img :src="contacts[currentIndex].avatar" class="w-[50px] h-[50px] rounded-full" alt="user photo" />
+                  <img
+                    draggable="false"
+                    :src="contacts[currentIndex].avatar"
+                    class="w-[50px] h-[50px] rounded-full"
+                    alt="user photo"
+                  />
                   <div class="flex flex-col">
                     <h2 class="text-base font-semibold text-slate-800">{{ contacts[currentIndex].name }}</h2>
                     <span class="text-sm text-slate-600">Lorem ipsum dolor sit amet consectetur.</span>
