@@ -5,6 +5,10 @@ const { createApp } = Vue;
 createApp({
   data() {
     return {
+      mousePositionX: 0,
+      mousePositionY: 0,
+      currentMessageIndex: undefined,
+      optionsMessageVisible: false,
       luxon: luxon,
       searchInputText: "",
       chatInputText: "",
@@ -183,27 +187,37 @@ createApp({
       this.currentIndex = index;
     },
     sendMessage: function () {
-      this.contacts[this.currentIndex].messages.push({
-        date: this.luxon.DateTime.now().toFormat("dd/MM/yyyy HH:mm:ss"),
-        message: this.chatInputText,
-        status: "sent",
-      });
-      this.chatInputText = "";
-      setTimeout(() => {
+      if (!(this.chatInputText.trim() === "")) {
         this.contacts[this.currentIndex].messages.push({
           date: this.luxon.DateTime.now().toFormat("dd/MM/yyyy HH:mm:ss"),
-          message: "Ok, nessun problema!",
-          status: "recived",
+          message: this.chatInputText,
+          status: "sent",
         });
-      }, 500);
+        this.chatInputText = "";
+        setTimeout(() => {
+          this.contacts[this.currentIndex].messages.push({
+            date: this.luxon.DateTime.now().toFormat("dd/MM/yyyy HH:mm:ss"),
+            message: "Ok, nessun problema!",
+            status: "recived",
+          });
+        }, 500);
+      } else {
+        return;
+      }
+    },
+    rightClickHandler: function (event, index) {
+      this.mousePositionX = event.clientX;
+      this.mousePositionY = event.clientY;
+      this.optionsMessageVisible = true;
+      this.currentMessageIndex = index;
+    },
+    deleteMessage() {
+      if (this.currentMessageIndex) {
+        this.contacts[this.currentIndex].messages.splice(this.currentMessageIndex);
+        this.optionsMessageVisible = false;
+      } else {
+        return;
+      }
     },
   },
-  computed: {
-    filteredContacts() {
-      return this.contacts.filter((contact) =>
-        contact.name.toLowerCase().includes(this.searchInputText.toLowerCase().trim())
-      );
-    },
-  },
-  mounted() {},
 }).mount("#app");

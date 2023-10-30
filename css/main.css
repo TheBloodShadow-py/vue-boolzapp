@@ -87,6 +87,7 @@
   top: 5px;
   display: table;
   right: 8px;
+  font-size: 14px;
   opacity: 0;
   transition: all 0.1s linear;
   cursor: pointer;

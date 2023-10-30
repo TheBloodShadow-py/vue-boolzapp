@@ -17,9 +17,9 @@
     <link rel="stylesheet" href="./css/main.css" />
   </head>
   <body>
-    <div id="app" class="bg-[#d4d5cb] w-full h-[100vh] px-3">
+    <div id="app" class="bg-[#d4d5cb] w-full h-[100vh] px-3 relative">
       <!-- MAIN CONTENT -->
-      <main @click.right.prevent="" class="z-10 my-9 bg-white rounded flex drop-shadow-2xl overflow-hidden">
+      <main class="z-10 my-9 bg-white rounded flex drop-shadow-2xl overflow-hidden" @click.right.prevent>
         <!-- ASIDE -->
         <aside class="w-[400px] flex flex-col bg-white shrink-0 z-50">
           <div class="flex flex-col bg-[#e6e6e6] py-3 px-5">
@@ -66,9 +66,10 @@
           <!-- CONTATTI -->
           <ul class="flex flex-col overflow-auto">
             <li
-              v-for="contact, index in filteredContacts"
+              v-for="contact, index in contacts"
               @click="changeIndex(index)"
               :class="{'bg-[#e5e7e6]': index === currentIndex}"
+              v-show="contact.name.toLowerCase().includes(searchInputText.toLowerCase())"
               class="drop-shadow-sm bg-white transition-colors duration-200 py-3 px-5 flex items-center gap-3 relative cursor-pointer"
             >
               <img draggable="false" class="rounded-full w-[60px] h-[60px]" :src="contact.avatar" alt="user1" />
@@ -111,6 +112,7 @@
           <ul class="flex flex-col overflow-y-auto gap-5 z-10 relative top-0 mt-[120px] mb-[102px] w-full mx-16 left-0">
             <li
               v-for="message, index in contacts[currentIndex].messages"
+              @click.right="rightClickHandler($event, index)"
               class="message select-text text-slate-700 text-[17px] py-4 max-w-[380px] pl-6 pr-16 rounded-xl relative"
               :class="contacts[currentIndex].messages[index].status === 'sent' ? 'bg-[#cef7b0] self-end' : 'bg-white self-start' "
             >
@@ -135,6 +137,13 @@
           </footer>
         </section>
       </main>
+      <div
+        @mouseleave="optionsMessageVisible = false"
+        class="z-50 bg-white absolute flex flex-col gap-3 rounded-lg cursor-pointer"
+        :class="optionsMessageVisible === true ? ` top-[${mousePositionY - 20}px] left-[${mousePositionX - 20}px]`  : 'hidden'"
+      >
+        <span @click="deleteMessage()" class="cursor-pointe transition-all duration-150 p-6">Delete message</span>
+      </div>
     </div>
     <script src="./js/main.js" type="text/javascript"></script>
   </body>
