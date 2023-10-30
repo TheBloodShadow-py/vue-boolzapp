@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boolzapp</title>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.3/build/global/luxon.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/main.css" />
+  </head>
+  <body>
+    <div id="app" class="bg-[#d4d5cb] w-full h-[100vh] px-3">
+      <!-- MAIN CONTENT -->
+      <main @click.right.prevent="" class="z-10 my-9 bg-white rounded flex drop-shadow-2xl overflow-hidden">
+        <!-- ASIDE -->
+        <aside class="w-[400px] flex flex-col bg-white shrink-0 z-50">
+          <div class="flex flex-col bg-[#e6e6e6] py-3 px-5">
+            <div class="flex justify-between items-center">
+              <div class="flex gap-3 items-center">
+                <img class="w-[50px] h-[50px] rounded-full" :src="userProfile.avatar" alt="user photo" />
+                <h2 class="font-semih2 text-slate-800">{{ userProfile.name }}</h2>
+              </div>
+              <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+            </div>
+          </div>
+          <div class="flex flex-col bg-[#84d4fb] py-4 px-5">
+            <div class="flex items-center gap-3">
+              <div class="flex gap-3 items-center">
+                <div class="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[white]">
+                  <i class="fa-solid fa-bell-slash text-xl text-[#84d4fb]"></i>
+                </div>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-semih2 text-slate-800">Ricevi notifiche di nuovi messaggi</span>
+                <span class="text-slate-800">Lorem ipsum dolor sit amet.</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col bg-[#ececec] py-2 px-3">
+            <div class="flex">
+              <div class="flex items-center justify-center py-[6px] px-8 border bg-white border-slate-300">
+                <i class="fa-solid fa-magnifying-glass text-lg text-slate-400"></i>
+              </div>
+              <input
+                v-model="searchInputText"
+                @input=""
+                type="text"
+                placeholder="Cerca o inizia una nuova chat"
+                class="py-[6px] px-4 text-sm placeholder:text-slate-600 text-slate-800 focus-visible:outline-none border border-l-0 w-full bg-white border-slate-300"
+              />
+            </div>
+          </div>
+          <!-- CONTATTI -->
+          <ul class="flex flex-col overflow-auto">
+            <li
+              v-for="contact, index in contacts"
+              @click="changeIndex(index)"
+              :class="{'bg-[#e5e7e6]': index === currentIndex}"
+              class="drop-shadow-sm bg-white transition-colors duration-200 py-3 px-5 flex items-center gap-3 relative cursor-pointer"
+            >
+              <img class="rounded-full w-[60px] h-[60px]" :src="contact.avatar" alt="user1" />
+              <div class="flex flex-col max-w-[230px]">
+                <h2 class="text-sm font-semibold text-slate-800 mb-1">{{ contact.name }}</h2>
+                <span class="text-sm text-slate-600">Lorem ipsum dolor sit amet consectetur.</span>
+              </div>
+              <span class="absolute top-4 right-4 text-slate-600 text-xs">12:00</span>
+            </li>
+          </ul>
+        </aside>
+        <!-- CHAT -->
+        <section class="w-[calc(50vw)] flex items-start overflow-y-auto">
+          <!-- HEADER CHAT -->
+          <header class="z-20 fixed top-0 left-[400px] w-[50vw]">
+            <div class="flex flex-col bg-[#e6e6e6] py-3 px-5">
+              <div class="flex justify-between items-center">
+                <div class="flex gap-3 items-center cursor-pointer">
+                  <img :src="contacts[currentIndex].avatar" class="w-[50px] h-[50px] rounded-full" alt="user photo" />
+                  <div class="flex flex-col">
+                    <h2 class="text-base font-semibold text-slate-800">{{ contacts[currentIndex].name }}</h2>
+                    <span class="text-sm text-slate-600">Lorem ipsum dolor sit amet consectetur.</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-5 text-slate-700 text-lg">
+                  <i class="fa-solid fa-video cursor-pointer"></i>
+                  <i class="fa-solid fa-phone-volume cursor-pointer"></i>
+                  <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+                </div>
+              </div>
+            </div>
+          </header>
+          <ul class="flex flex-col overflow-y-auto gap-5 z-10 relative top-0 mt-[120px] mb-[102px] w-full mx-16 left-0">
+            <li
+              v-for="message, index in contacts[currentIndex].messages"
+              class="message select-text text-slate-700 text-[17px] py-4 max-w-[380px] pl-6 pr-16 rounded-xl relative"
+              :class="contacts[currentIndex].messages[index].status === 'sent' ? 'bg-[#cef7b0] self-end' : 'bg-white self-start' "
+            >
+              {{ message.message }}
+              <span class="date"
+                >{{luxon.DateTime.fromFormat(message.date, "dd/MM/yyyy HH:mm:ss").toFormat('HH:mm')}}</span
+              >
+            </li>
+          </ul>
+          <!-- FOOTER CHAT -->
+          <footer class="z-20 fixed bottom-0 w-[calc(100%-400px)]">
+            <div class="flex bg-[#e6e6e6] justify-between items-center py-3 px-6">
+              <i class="fa-regular fa-face-smile text-slate-700 text-2xl ml-5 cursor-pointer"></i>
+              <input
+                v-model="chatInputText"
+                type="text"
+                @keypress.enter="sendMessage()"
+                class="w-full mx-10 py-[10px] px-4 text-sm placeholder:text-slate-600 text-slate-800 focus-visible:outline-none rounded-lg bg-white"
+              />
+              <i class="fa-solid fa-microphone text-slate-700 text-2xl mr-5 cursor-pointer"></i>
+            </div>
+          </footer>
+        </section>
+      </main>
+    </div>
+    <script src="./js/main.js" type="text/javascript"></script>
+  </body>
+</html>
