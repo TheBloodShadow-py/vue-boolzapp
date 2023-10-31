@@ -25,12 +25,7 @@
           <div class="flex flex-col bg-[#e6e6e6] py-3 px-5">
             <div class="flex justify-between items-center">
               <div class="flex gap-3 items-center">
-                <img
-                  draggable="false"
-                  class="w-[50px] h-[50px] rounded-full"
-                  :src="userProfile.avatar"
-                  alt="user photo"
-                />
+                <img draggable="false" class="w-[50px] h-[50px] rounded-full" :src="userProfile.avatar" alt="user photo" />
                 <h2 class="font-semih2 text-slate-800">{{ userProfile.name }}</h2>
               </div>
               <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
@@ -75,10 +70,12 @@
               <img draggable="false" class="rounded-full w-[60px] h-[60px]" :src="contact.avatar" alt="user1" />
               <div class="flex flex-col max-w-[230px]">
                 <h2 class="text-sm font-semibold text-slate-800 mb-1">{{ contact.name }}</h2>
-                <span class="text-sm text-slate-600">{{ contact.messages.at(-1).message }}</span>
+                <span :class="!contact.messages.length > 0 ? 'text-slate-500 italic' : 'text-slate-600'" class="text-sm"
+                  >{{ contact.messages.length > 0 ? contact.messages.at(-1).message : 'Nessun messaggio...' }}</span
+                >
               </div>
               <span class="absolute top-4 right-4 text-slate-600 text-xs"
-                >{{ luxon.DateTime.fromFormat(contact.messages.at(-1).date, "dd/MM/yyyy HH:mm:ss").toFormat('HH:mm')}}
+                >{{ contact.messages.length > 0 ? luxon.DateTime.fromFormat(contact.messages.at(-1).date, "dd/MM/yyyy HH:mm:ss").toFormat('HH:mm') : ''}}
               </span>
             </li>
           </ul>
@@ -90,12 +87,7 @@
             <div class="flex flex-col bg-[#e6e6e6] py-3 px-5">
               <div class="flex justify-between items-center">
                 <div class="flex gap-3 items-center cursor-pointer">
-                  <img
-                    draggable="false"
-                    :src="contacts[currentIndex].avatar"
-                    class="w-[50px] h-[50px] rounded-full"
-                    alt="user photo"
-                  />
+                  <img draggable="false" :src="contacts[currentIndex].avatar" class="w-[50px] h-[50px] rounded-full" alt="user photo" />
                   <div class="flex flex-col">
                     <h2 class="text-base font-semibold text-slate-800">{{ contacts[currentIndex].name }}</h2>
                     <span class="text-sm text-slate-600">Lorem ipsum dolor sit amet consectetur.</span>
@@ -117,9 +109,7 @@
               :class="contacts[currentIndex].messages[index].status === 'sent' ? 'bg-[#cef7b0] self-end' : 'bg-white self-start' "
             >
               {{ message.message }}
-              <span class="date"
-                >{{luxon.DateTime.fromFormat(message.date, "dd/MM/yyyy HH:mm:ss").toFormat('HH:mm')}}</span
-              >
+              <span class="date">{{luxon.DateTime.fromFormat(message.date, "dd/MM/yyyy HH:mm:ss").toFormat('HH:mm')}}</span>
             </li>
           </ul>
           <!-- FOOTER CHAT -->

@@ -212,8 +212,8 @@ createApp({
       this.currentMessageIndex = index;
     },
     deleteMessage() {
-      if (this.currentMessageIndex) {
-        this.contacts[this.currentIndex].messages.splice(this.currentMessageIndex);
+      if (this.currentMessageIndex !== undefined) {
+        this.contacts[this.currentIndex].messages.splice(this.currentMessageIndex, 1);
         this.optionsMessageVisible = false;
       } else {
         return;
